@@ -5,7 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 // import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
 
 const Map = ({ classes }) => {
-  return <div>Map</div>;
+  return <div >Map</div>;
 };
 
 const styles = {
