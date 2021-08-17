@@ -5,6 +5,7 @@ import colors from 'colors';
 import typeDefs from './typeDefs.js';
 import resolvers from './resolvers.js';
 import connectDB from './db.js';
+import { findOrCreateUser } from './controllers/userController.js';
 
 dotenv.config();
 
@@ -13,6 +14,22 @@ connectDB();
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
+	context: async ({ req }) => {
+		let authToken = null;
+		let currentUser = null;
+
+		try {
+			authToken = req.headers.authorization;
+
+			if (authToken) {
+				currentUser = await findOrCreateUser(authToken);
+			}
+		} catch (err) {
+			console.error(`Unable to authenticate user with token ${authToken}`);
+		}
+
+		return { currentUser };
+	},
 });
 
 const PORT = process.env.PORT || 4000;
