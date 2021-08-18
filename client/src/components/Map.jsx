@@ -11,9 +11,9 @@ import { withStyles } from '@material-ui/core/styles';
 // import DeleteIcon from '@material-ui/icons/DeleteTwoTone';
 import Brightness5Icon from '@material-ui/icons/Brightness5';
 import TrafficRoundedIcon from '@material-ui/icons/TrafficRounded';
-import TrafficOutlinedIcon from '@material-ui/icons/TrafficOutlined';
 import DirectionsBikeOutlinedIcon from '@material-ui/icons/DirectionsBikeOutlined';
 import PublicOutlinedIcon from '@material-ui/icons/PublicOutlined';
+import NightsStayIcon from '@material-ui/icons/NightsStay';
 
 import PinIcon from './PinIcon';
 
@@ -21,10 +21,10 @@ import PinIcon from './PinIcon';
 //                                                     Helper Functions
 const indexPlusOne = (num) => {
 	if (num + 1 >= MAP_LIST.length) {
-    return 0;
-  } else {
-    return num + 1;
-  }
+		return 0;
+	} else {
+		return num + 1;
+	}
 };
 
 // --------------------------------------------------------------------
@@ -40,12 +40,11 @@ const INITIAL_VIEWPORT = {
 // Kenny Edition
 const MAP_LIST = [
 	'mapbox://styles/mapbox/streets-v11',
-	'mapbox://styles/mapbox/navigation-day-v1',
 	'mapbox://styles/mapbox/navigation-night-v1',
+	'mapbox://styles/mapbox/navigation-day-v1',
 	'mapbox://styles/mapbox/outdoors-v11',
 	'mapbox://styles/mapbox/satellite-streets-v11',
 ];
-
 
 // --------------------------------------------------------------------
 
@@ -94,8 +93,7 @@ const Map = ({ classes }) => {
 	const onClickHandler = (e) => {
 		e.preventDefault();
 
-    setCurrMapIndex(indexPlusOne(currMapIndex));
-		
+		setCurrMapIndex(indexPlusOne(currMapIndex));
 	};
 
 	return (
@@ -124,12 +122,24 @@ const Map = ({ classes }) => {
 				<div
 					onClick={(e) => onClickHandler(e)}
 					style={{ float: 'right', margin: '2.9rem 2.9rem' }}>
-					
-          {currMapIndex === 0 && <Brightness5Icon fontSize='large' style={{color:'grey'}}/>}
-          {currMapIndex === 1 && <TrafficRoundedIcon fontSize='large' style={{color:'grey'}}/>}
-          {currMapIndex === 2 && <TrafficOutlinedIcon fontSize='large' style={{color:'white'}}/>}
-          {currMapIndex === 3 && <DirectionsBikeOutlinedIcon fontSize='large' style={{color:'grey'}}/>}
-          {currMapIndex === 4 && <PublicOutlinedIcon fontSize='large' style={{color:'white'}}/>}
+					{currMapIndex === 0 && (
+						<Brightness5Icon fontSize="large" style={{ color: 'black' }} />
+					)}
+					{currMapIndex === 1 && (
+						<NightsStayIcon fontSize="large" style={{ color: 'white' }} />
+					)}
+					{currMapIndex === 2 && (
+						<TrafficRoundedIcon fontSize="large" style={{ color: 'black' }} />
+					)}
+					{currMapIndex === 3 && (
+						<DirectionsBikeOutlinedIcon
+							fontSize="large"
+							style={{ color: 'black' }}
+						/>
+					)}
+					{currMapIndex === 4 && (
+						<PublicOutlinedIcon fontSize="large" style={{ color: 'white' }} />
+					)}
 				</div>
 				{/* -------------------- Kenny Edition -------------------- */}
 
