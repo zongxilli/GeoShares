@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ReactMapGL, {
 	NavigationControl,
 	GeolocateControl,
@@ -16,9 +16,12 @@ import PublicOutlinedIcon from '@material-ui/icons/PublicOutlined';
 import NightsStayIcon from '@material-ui/icons/NightsStay';
 
 import PinIcon from './PinIcon';
+import Blog from './Blog';
+import Context from '../context';
 
 // --------------------------------------------------------------------
 //                                                     Helper Functions
+//= Kenny Edition
 const indexPlusOne = (num) => {
 	if (num + 1 >= MAP_LIST.length) {
 		return 0;
@@ -37,7 +40,7 @@ const INITIAL_VIEWPORT = {
 	zoom: 12,
 };
 
-// Kenny Edition
+//= Kenny Edition
 const MAP_LIST = [
 	'mapbox://styles/mapbox/streets-v11',
 	'mapbox://styles/mapbox/navigation-night-v1',
@@ -48,19 +51,22 @@ const MAP_LIST = [
 
 // --------------------------------------------------------------------
 
-//? --------------------------------------------------------------------
-//?                                                      Map Icon Style
+// --------------------------------------------------------------------
+//=                                                      Map Icon Style
 
+//= Kenny Edition
 const geolocateControlStyle = {
 	right: 50,
 	bottom: 40,
 };
 
+//= Kenny Edition
 const navControlStyle = {
 	right: 50,
 	bottom: 100,
 };
 
+//= Kenny Edition
 const scaleControlStyle = {
 	right: 110,
 	bottom: 40,
@@ -69,8 +75,11 @@ const scaleControlStyle = {
 //? --------------------------------------------------------------------
 
 const Map = ({ classes }) => {
-	// Kenny Edition
+	//= Kenny Edition
 	const [currMapIndex, setCurrMapIndex] = useState(0);
+	const [isOnThemeIcon, setIsOnThemeIcon] = useState(false);
+
+	const { state, dispatch } = useContext(Context);
 
 	const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
 	const [userPosition, setUserPosition] = useState(null);
@@ -89,11 +98,29 @@ const Map = ({ classes }) => {
 		}
 	};
 
-	// Kenny Edition
+	//== Kenny Edition
 	const onClickHandler = (e) => {
 		e.preventDefault();
 
+		setIsOnThemeIcon(true);
 		setCurrMapIndex(indexPlusOne(currMapIndex));
+    setTimeout(() => {
+      setIsOnThemeIcon(false);
+    }, 1000);
+	};
+
+	const onMapClickHandler = ({ lngLat, leftButton }) => {
+		if (!leftButton || isOnThemeIcon) return;
+
+		if (!state.draft) {
+			dispatch({ type: 'CREATE_DRAFT' });
+		}
+
+		const [longitude, latitude] = lngLat;
+		dispatch({
+			type: 'UPDATE_DRAFT_LOCATION',
+			payload: { latitude, longitude },
+		});
 	};
 
 	return (
@@ -104,6 +131,7 @@ const Map = ({ classes }) => {
 				mapStyle={MAP_LIST[currMapIndex]}
 				mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN}
 				onViewportChange={(currViewport) => setViewport(currViewport)}
+				onClick={(e) => onMapClickHandler(e)}
 				{...viewport}>
 				{/* Geo locate Control  */}
 				<div className={classes.geolocationControl}>
@@ -114,7 +142,7 @@ const Map = ({ classes }) => {
 						auto
 					/>
 				</div>
-				{/* -------------------- Kenny Edition -------------------- */}
+				{/* //= -------------------- Kenny Edition -------------------- */}
 
 				<ScaleControl style={scaleControlStyle} />
 				<NavigationControl style={navControlStyle} />
@@ -141,7 +169,7 @@ const Map = ({ classes }) => {
 						<PublicOutlinedIcon fontSize="large" style={{ color: 'white' }} />
 					)}
 				</div>
-				{/* -------------------- Kenny Edition -------------------- */}
+				{/* //= -------------------- Kenny Edition -------------------- */}
 
 				{/* Pin for User's Current Position */}
 				{/* {userPosition && (
@@ -153,7 +181,20 @@ const Map = ({ classes }) => {
 						<PinIcon size={40} color="red" />
 					</Marker>
 				)} */}
+
+				{/* Draft Pin */}
+				{state.draft && (
+					<Marker
+						latitude={state.draft.latitude}
+						longitude={state.draft.longitude}
+						offsetLeft={-19}
+						offsetTop={-37}>
+						<PinIcon size={40} color="hotpink" />
+					</Marker>
+				)}
 			</ReactMapGL>
+
+      {/* Blog Area to add Pin Content */}
 		</div>
 	);
 };
