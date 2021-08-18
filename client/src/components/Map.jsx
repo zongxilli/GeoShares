@@ -6,26 +6,40 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/DeleteTwoTone';
 import Brightness6Icon from '@material-ui/icons/Brightness6';
 
+// --------------------------------------------------------------------
+//                                                        Initial State
 const INITIAL_VIEWPORT = {
 	latitude: 43.6532,
 	longitude: -79.3832,
 	zoom: 13,
 };
 
-// Kenny Addition
+// Kenny Edition
 const INITIAL_MAP = 'mapbox://styles/mapbox/navigation-night-v1';
+// --------------------------------------------------------------------
 
 const Map = ({ classes }) => {
-	// Kenny Addition
+	// Kenny Edition
 	const [currMap, setCurrMap] = useState(INITIAL_MAP);
 
 	const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
+
+	// Kenny Edition
+	const onClickHandler = (e) => {
+		e.preventDefault();
+
+		if (currMap === 'mapbox://styles/mapbox/navigation-night-v1') {
+			setCurrMap('mapbox://styles/mapbox/navigation-day-v1');
+		} else {
+			setCurrMap('mapbox://styles/mapbox/navigation-night-v1');
+		}
+	};
 
 	return (
 		<div className={classes.root}>
 			<ReactMapGL
 				width="100vw"
-				height="calc(100vh - 64px)"
+				height="calc(100vh - 65px)"
 				mapStyle={currMap}
 				mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN}
 				onViewportChange={(currViewport) => setViewport(currViewport)}
@@ -36,6 +50,23 @@ const Map = ({ classes }) => {
 						onViewportChange={(currViewport) => setViewport(currViewport)}
 					/>
 				</div>
+				{/* ---------- Kenny Edition ---------- */}
+				<div
+					onClick={(e) => onClickHandler(e)}
+					style={{ float: 'right', margin: '1.25rem' }}>
+					{currMap === 'mapbox://styles/mapbox/navigation-night-v1' ? (
+						<Brightness6Icon
+							className={classes.icon}
+							style={{ color: 'white' }}
+						/>
+					) : (
+						<Brightness6Icon
+							className={classes.icon}
+							style={{ color: 'black' }}
+						/>
+					)}
+				</div>
+				{/* ---------- Kenny Edition ---------- */}
 			</ReactMapGL>
 		</div>
 	);
