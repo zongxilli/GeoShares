@@ -87,7 +87,8 @@ const Map = ({ classes }) => {
 	useEffect(() => {
 		getUserPosition();
 	}, []);
-
+  
+  //== Kenny Edition
   useEffect(() => {
     setTimeout(() => {
 			setIsOnThemeIcon(false);

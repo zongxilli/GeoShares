@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper } from "@material-ui/core";
+import { Paper } from '@material-ui/core';
 
 import Context from '../context';
 import NoContent from './Pin/NoContent';
@@ -26,12 +26,14 @@ const Blog = ({ classes }) => {
 
 const styles = {
 	root: {
-		minWidth: 350,
-		maxWidth: 400,
+		//minWidth: 350,
+		//maxWidth: 400,
+		width: '19vw',
 		maxHeight: 'calc(100vh - 64px)',
 		overflowY: 'scroll',
 		display: 'flex',
 		justifyContent: 'center',
+		background: '#c5cae9',
 	},
 	rootMobile: {
 		maxWidth: '100%',
