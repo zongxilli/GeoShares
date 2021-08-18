@@ -18,7 +18,7 @@ const Login = ({ classes }) => {
 				headers: { authorization: idToken },
 			});
 
-			const me = await client.request(ME_QUERY);
+			const {me} = await client.request(ME_QUERY);
 
 			dispatch({ type: 'LOGIN_USER', payload: me });
 			dispatch({ type: 'IS_LOGGED_IN', payload: googleUser.isSignedIn() });
@@ -46,7 +46,8 @@ const Login = ({ classes }) => {
 				onFailure={onFailureHandler}
 				onSuccess={onSuccessHandler}
 				isSignedIn={true}
-				theme="light"
+				// buttonText='Login with Google'
+				// theme="dark"
 			/>
 		</div>
 	);
