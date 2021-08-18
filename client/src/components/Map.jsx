@@ -88,6 +88,12 @@ const Map = ({ classes }) => {
 		getUserPosition();
 	}, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+			setIsOnThemeIcon(false);
+		}, 1000);
+  }, [currMapIndex])
+
 	const getUserPosition = () => {
 		if ('geolocation' in navigator) {
 			navigator.geolocation.getCurrentPosition((position) => {
@@ -104,9 +110,9 @@ const Map = ({ classes }) => {
 
 		setIsOnThemeIcon(true);
 		setCurrMapIndex(indexPlusOne(currMapIndex));
-    setTimeout(() => {
-      setIsOnThemeIcon(false);
-    }, 1000);
+		// setTimeout(() => {
+		// 	setIsOnThemeIcon(false);
+		// }, 2000);
 	};
 
 	const onMapClickHandler = ({ lngLat, leftButton }) => {
@@ -194,7 +200,8 @@ const Map = ({ classes }) => {
 				)}
 			</ReactMapGL>
 
-      {/* Blog Area to add Pin Content */}
+			{/* Blog Area to add Pin Content */}
+			<Blog />
 		</div>
 	);
 };

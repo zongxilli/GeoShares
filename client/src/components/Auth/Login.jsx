@@ -18,7 +18,7 @@ const Login = ({ classes }) => {
 				headers: { authorization: idToken },
 			});
 
-			const {me} = await client.request(ME_QUERY);
+			const { me } = await client.request(ME_QUERY);
 
 			dispatch({ type: 'LOGIN_USER', payload: me });
 			dispatch({ type: 'IS_LOGGED_IN', payload: googleUser.isSignedIn() });
@@ -38,8 +38,8 @@ const Login = ({ classes }) => {
 				variant="h3"
 				gutterBottom
 				noWrap
-				style={{ color: 'rgb(215, 6, 255, 1)' }}>
-				welcome
+				style={{ color: '#06C7FF' }}>
+				Welcome to GeoShares
 			</Typography>
 			<GoogleLogin
 				clientId={process.env.REACT_APP_OAUTH_CLIENT_ID}
@@ -55,7 +55,8 @@ const Login = ({ classes }) => {
 
 const styles = {
 	root: {
-		height: '100vh',
+		height: '98vh',
+		width: 'auto',
 		display: 'flex',
 		justifyContent: 'center',
 		flexDirection: 'column',
