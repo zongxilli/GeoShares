@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import ReactMapGL, { NavigationControl } from 'react-map-gl';
+import React, { useState, useEffect } from 'react';
+import ReactMapGL, { NavigationControl, Marker } from 'react-map-gl';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import DeleteIcon from '@material-ui/icons/DeleteTwoTone';
+// import Button from '@material-ui/core/Button';
+// import Typography from '@material-ui/core/Typography';
+// import DeleteIcon from '@material-ui/icons/DeleteTwoTone';
 import Brightness6Icon from '@material-ui/icons/Brightness6';
+
+import PinIcon from './PinIcon';
 
 // --------------------------------------------------------------------
 //                                                        Initial State
@@ -23,6 +25,21 @@ const Map = ({ classes }) => {
 	const [currMap, setCurrMap] = useState(INITIAL_MAP);
 
 	const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
+	const [userPosition, setUserPosition] = useState(null);
+
+	useEffect(() => {
+		getUserPosition();
+	}, []);
+
+	const getUserPosition = () => {
+		if ('geolocation' in navigator) {
+			navigator.geolocation.getCurrentPosition((position) => {
+				const { latitude, longitude } = position.coords;
+				setViewport({ ...viewport, latitude, longitude });
+				setUserPosition({ latitude, longitude });
+			});
+		}
+	};
 
 	// Kenny Edition
 	const onClickHandler = (e) => {
@@ -67,6 +84,17 @@ const Map = ({ classes }) => {
 					)}
 				</div>
 				{/* ---------- Kenny Edition ---------- */}
+
+				{/* Pin for User's Current Position */}
+				{userPosition && (
+					<Marker
+						latitude={userPosition.latitude}
+						longitude={userPosition.longitude}
+						offsetLeft={-19}
+						offsetTop={-37}>
+						<PinIcon size={40} color="red" />
+					</Marker>
+				)}
 			</ReactMapGL>
 		</div>
 	);

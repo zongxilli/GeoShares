@@ -23,12 +23,12 @@ const Logout = ({ classes }) => {
 					<Typography
 						variant="body1"
 						className={classes.buttonText}
-						style={{ color: '#2596be' }}>
+						style={{ color: 'white' }}>
 						Signout
 					</Typography>
 					<ExitToAppIcon
 						className={classes.buttonIcon}
-						style={{ color: '#2596be' }}
+						style={{ color: 'white' }}
 					/>
 				</span>
 			)}
