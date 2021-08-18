@@ -1,28 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import ReactMapGL, { NavigationControl, Marker } from 'react-map-gl';
+import ReactMapGL, {
+	NavigationControl,
+	GeolocateControl,
+	ScaleControl,
+	Marker,
+} from 'react-map-gl';
 import { withStyles } from '@material-ui/core/styles';
 // import Button from '@material-ui/core/Button';
 // import Typography from '@material-ui/core/Typography';
 // import DeleteIcon from '@material-ui/icons/DeleteTwoTone';
-import Brightness6Icon from '@material-ui/icons/Brightness6';
+import Brightness5Icon from '@material-ui/icons/Brightness5';
+import TrafficRoundedIcon from '@material-ui/icons/TrafficRounded';
+import TrafficOutlinedIcon from '@material-ui/icons/TrafficOutlined';
+import DirectionsBikeOutlinedIcon from '@material-ui/icons/DirectionsBikeOutlined';
+import PublicOutlinedIcon from '@material-ui/icons/PublicOutlined';
 
 import PinIcon from './PinIcon';
 
 // --------------------------------------------------------------------
-//                                                        Initial State
+//                                                     Helper Functions
+const indexPlusOne = (num) => {
+	if (num + 1 >= MAP_LIST.length) {
+    return 0;
+  } else {
+    return num + 1;
+  }
+};
+
+// --------------------------------------------------------------------
+
+// --------------------------------------------------------------------
+//                                                       Initial State
 const INITIAL_VIEWPORT = {
 	latitude: 43.6532,
 	longitude: -79.3832,
-	zoom: 13,
+	zoom: 12,
 };
 
 // Kenny Edition
-const INITIAL_MAP = 'mapbox://styles/mapbox/navigation-night-v1';
+const MAP_LIST = [
+	'mapbox://styles/mapbox/streets-v11',
+	'mapbox://styles/mapbox/navigation-day-v1',
+	'mapbox://styles/mapbox/navigation-night-v1',
+	'mapbox://styles/mapbox/outdoors-v11',
+	'mapbox://styles/mapbox/satellite-streets-v11',
+];
+
+
 // --------------------------------------------------------------------
+
+//? --------------------------------------------------------------------
+//?                                                      Map Icon Style
+
+const geolocateControlStyle = {
+	right: 50,
+	bottom: 40,
+};
+
+const navControlStyle = {
+	right: 50,
+	bottom: 100,
+};
+
+const scaleControlStyle = {
+	right: 110,
+	bottom: 40,
+};
+
+//? --------------------------------------------------------------------
 
 const Map = ({ classes }) => {
 	// Kenny Edition
-	const [currMap, setCurrMap] = useState(INITIAL_MAP);
+	const [currMapIndex, setCurrMapIndex] = useState(0);
 
 	const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
 	const [userPosition, setUserPosition] = useState(null);
@@ -45,48 +94,47 @@ const Map = ({ classes }) => {
 	const onClickHandler = (e) => {
 		e.preventDefault();
 
-		if (currMap === 'mapbox://styles/mapbox/navigation-night-v1') {
-			setCurrMap('mapbox://styles/mapbox/navigation-day-v1');
-		} else {
-			setCurrMap('mapbox://styles/mapbox/navigation-night-v1');
-		}
+    setCurrMapIndex(indexPlusOne(currMapIndex));
+		
 	};
 
 	return (
 		<div className={classes.root}>
 			<ReactMapGL
 				width="100vw"
-				height="calc(100vh - 65px)"
-				mapStyle={currMap}
+				height="calc(100vh - 64px)"
+				mapStyle={MAP_LIST[currMapIndex]}
 				mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN}
 				onViewportChange={(currViewport) => setViewport(currViewport)}
 				{...viewport}>
-				{/* Navigation Control tool bar */}
-				<div className={classes.navigationControl}>
-					<NavigationControl
-						onViewportChange={(currViewport) => setViewport(currViewport)}
+				{/* Geo locate Control  */}
+				<div className={classes.geolocationControl}>
+					<GeolocateControl
+						style={geolocateControlStyle}
+						positionOptions={{ enableHighAccuracy: true }}
+						trackUserLocation={true}
+						auto
 					/>
 				</div>
-				{/* ---------- Kenny Edition ---------- */}
+				{/* -------------------- Kenny Edition -------------------- */}
+
+				<ScaleControl style={scaleControlStyle} />
+				<NavigationControl style={navControlStyle} />
+
 				<div
 					onClick={(e) => onClickHandler(e)}
-					style={{ float: 'right', margin: '1.25rem' }}>
-					{currMap === 'mapbox://styles/mapbox/navigation-night-v1' ? (
-						<Brightness6Icon
-							className={classes.icon}
-							style={{ color: 'white' }}
-						/>
-					) : (
-						<Brightness6Icon
-							className={classes.icon}
-							style={{ color: 'black' }}
-						/>
-					)}
+					style={{ float: 'right', margin: '2.9rem 2.9rem' }}>
+					
+          {currMapIndex === 0 && <Brightness5Icon fontSize='large' style={{color:'grey'}}/>}
+          {currMapIndex === 1 && <TrafficRoundedIcon fontSize='large' style={{color:'grey'}}/>}
+          {currMapIndex === 2 && <TrafficOutlinedIcon fontSize='large' style={{color:'white'}}/>}
+          {currMapIndex === 3 && <DirectionsBikeOutlinedIcon fontSize='large' style={{color:'grey'}}/>}
+          {currMapIndex === 4 && <PublicOutlinedIcon fontSize='large' style={{color:'white'}}/>}
 				</div>
-				{/* ---------- Kenny Edition ---------- */}
+				{/* -------------------- Kenny Edition -------------------- */}
 
 				{/* Pin for User's Current Position */}
-				{userPosition && (
+				{/* {userPosition && (
 					<Marker
 						latitude={userPosition.latitude}
 						longitude={userPosition.longitude}
@@ -94,7 +142,7 @@ const Map = ({ classes }) => {
 						offsetTop={-37}>
 						<PinIcon size={40} color="red" />
 					</Marker>
-				)}
+				)} */}
 			</ReactMapGL>
 		</div>
 	);
@@ -108,12 +156,7 @@ const styles = {
 		display: 'flex',
 		flexDirection: 'column-reverse',
 	},
-	navigationControl: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		margin: '1em',
-	},
+
 	deleteIcon: {
 		color: 'red',
 	},
