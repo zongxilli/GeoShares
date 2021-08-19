@@ -4,12 +4,13 @@ import ReactMapGL, {
 	GeolocateControl,
 	ScaleControl,
 	Marker,
+	Popup,
 } from 'react-map-gl';
 import { withStyles } from '@material-ui/core/styles';
 import differenceInMinutes from 'date-fns/difference_in_minutes';
-// import Button from '@material-ui/core/Button';
-// import Typography from '@material-ui/core/Typography';
-// import DeleteIcon from '@material-ui/icons/DeleteTwoTone';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import DeleteIcon from '@material-ui/icons/DeleteTwoTone';
 import Brightness5Icon from '@material-ui/icons/Brightness5';
 import TrafficRoundedIcon from '@material-ui/icons/TrafficRounded';
 import DirectionsBikeOutlinedIcon from '@material-ui/icons/DirectionsBikeOutlined';
@@ -18,6 +19,7 @@ import NightsStayIcon from '@material-ui/icons/NightsStay';
 
 import { useClient } from '../client';
 import { GET_PINS_QUERY } from '../graphql/queries';
+import { DELETE_PIN_MUTATION } from '../graphql/mutations';
 import PinIcon from './PinIcon';
 import Blog from './Blog';
 import Context from '../context';
@@ -82,12 +84,13 @@ const Map = ({ classes }) => {
 
 	//= Kenny Edition
 	const [currMapIndex, setCurrMapIndex] = useState(0);
-	const [isOnThemeIcon, setIsOnThemeIcon] = useState(false);
+	const [stopPinFeatureForOneSec, setStopPinFeatureForOneSec] = useState(false);
 
 	const { state, dispatch } = useContext(Context);
 
 	const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
-	const [userPosition, setUserPosition] = useState(null);
+	//const [userPosition, setUserPosition] = useState(null);
+	const [popup, setPopup] = useState(null);
 
 	useEffect(() => {
 		getUserPosition();
@@ -103,10 +106,10 @@ const Map = ({ classes }) => {
 	useEffect(
 		() => {
 			setTimeout(() => {
-				setIsOnThemeIcon(false);
-			}, 1000);
+				setStopPinFeatureForOneSec(false);
+			}, 1500);
 		},
-		[currMapIndex]
+		[stopPinFeatureForOneSec]
 	);
 
 	const getUserPosition = () => {
@@ -114,20 +117,9 @@ const Map = ({ classes }) => {
 			navigator.geolocation.getCurrentPosition((position) => {
 				const { latitude, longitude } = position.coords;
 				setViewport({ ...viewport, latitude, longitude });
-				setUserPosition({ latitude, longitude });
+				//setUserPosition({ latitude, longitude });
 			});
 		}
-	};
-
-	//== Kenny Edition
-	const onClickHandler = (e) => {
-		e.preventDefault();
-
-		setIsOnThemeIcon(true);
-		setCurrMapIndex(indexPlusOne(currMapIndex));
-		// setTimeout(() => {
-		// 	setIsOnThemeIcon(false);
-		// }, 2000);
 	};
 
 	const getPins = async () => {
@@ -135,8 +127,19 @@ const Map = ({ classes }) => {
 		dispatch({ type: 'GET_PINS', payload: getPins });
 	};
 
+	//== Kenny Edition
+	const changeMapOnClickHandler = (e) => {
+		e.preventDefault();
+
+		setStopPinFeatureForOneSec(true);
+		setCurrMapIndex(indexPlusOne(currMapIndex));
+		// setTimeout(() => {
+		// 	setStopPinFeatureForOneSec(false);
+		// }, 2000);
+	};
+
 	const onMapClickHandler = ({ lngLat, leftButton }) => {
-		if (!leftButton || isOnThemeIcon) return;
+		if (!leftButton || stopPinFeatureForOneSec) return;
 
 		if (!state.draft) {
 			dispatch({ type: 'CREATE_DRAFT' });
@@ -149,11 +152,26 @@ const Map = ({ classes }) => {
 		});
 	};
 
+	const pinOnClickHandler = (pin) => {
+		setPopup(pin);
+		dispatch({ type: 'SET_PIN', payload: pin });
+	};
+
 	const highlightNewPin = (pin) => {
 		const isNewPin =
 			differenceInMinutes(Date.now(), Number(pin.createdAt)) <= 30;
 
 		return isNewPin ? 'limegreen' : 'darkblue';
+	};
+
+	const isAuthUser = () => state.currentUser._id === popup.author._id;
+
+	const deletePinHandler = async (pin) => {
+		const variables = { pinId: pin._id };
+		const { deletePin } = await client.request(DELETE_PIN_MUTATION, variables);
+		dispatch({ type: 'DELETE_PIN', payload: deletePin });
+		setPopup(null);
+		setStopPinFeatureForOneSec(true);
 	};
 
 	return (
@@ -181,7 +199,7 @@ const Map = ({ classes }) => {
 				<NavigationControl style={navControlStyle} />
 
 				<div
-					onClick={(e) => onClickHandler(e)}
+					onClick={(e) => changeMapOnClickHandler(e)}
 					style={{ float: 'right', margin: '2.9rem 2.9rem' }}>
 					{currMapIndex === 0 && (
 						<Brightness5Icon fontSize="large" style={{ color: 'black' }} />
@@ -235,12 +253,38 @@ const Map = ({ classes }) => {
 						offsetLeft={-19}
 						offsetTop={-37}>
 						<PinIcon
-							//onClick={() => handleSelectPin(pin)}
+							onClick={() => pinOnClickHandler(pin)}
 							size={40}
 							color={highlightNewPin(pin)}
 						/>
 					</Marker>
 				))}
+
+				{/* Popup Dialog for Created Pins */}
+				{popup && (
+					<Popup
+						anchor="top"
+						latitude={popup.latitude}
+						longitude={popup.longitude}
+						closeOnClick={false}
+						onClose={() => setPopup(null)}>
+						<img
+							className={classes.popupImage}
+							src={popup.image}
+							alt={popup.title}
+						/>
+						<div className={classes.popupTab}>
+							<Typography>
+								{popup.latitude.toFixed(6)}, {popup.longitude.toFixed(6)}
+							</Typography>
+							{isAuthUser() && (
+								<Button onClick={() => deletePinHandler(popup)}>
+									<DeleteIcon className={classes.deleteIcon} />
+								</Button>
+							)}
+						</div>
+					</Popup>
+				)}
 			</ReactMapGL>
 
 			{/* Blog Area to add Pin Content */}
