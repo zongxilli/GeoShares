@@ -28,6 +28,7 @@ export default gql`
 
 	type Query {
 		me: User
+		getPins: [Pin!]
 	}
 
 	input CreatePinInput {

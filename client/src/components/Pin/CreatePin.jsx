@@ -59,7 +59,10 @@ const CreatePin = ({ classes }) => {
 				variables
 			);
 
+
 			console.log('Pin created', { createPin });
+			//! I dont think we need this one
+			dispatch({type: 'CREATE_PIN', payload: createPin})
 			discardHandler();
 		} catch (err) {
 			setSubmitting(false);
