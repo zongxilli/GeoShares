@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -19,18 +20,33 @@ const CreatePin = ({ classes }) => {
 	const [image, setImage] = useState('');
 	const [content, setContent] = useState('');
 
-	const submitHandler = (e) => {
-		e.preventDefault();
-
-		console.log({ title, image, content });
-	};
-
 	const discardHandler = (e) => {
 		e.preventDefault();
 		setTitle('');
 		setImage('');
 		setContent('');
-    dispatch({type: 'DELETE_DRAFT'})
+		dispatch({ type: 'DELETE_DRAFT' });
+	};
+
+	const imageUploadHandler = async () => {
+		const data = new FormData();
+		data.append('file', image);
+		data.append('upload_preset', 'geoshares');
+		data.append('cloud_name', 'zongxi-kenny');
+
+		const res = await axios.post(
+			'https://api.cloudinary.com/v1_1/zongxi-kenny/image/upload',
+			data
+		);
+		return res.data.url;
+	};
+
+	const submitHandler = async (e) => {
+		e.preventDefault();
+
+		const url = await imageUploadHandler();
+
+		console.log({ title, image, url, content });
 	};
 
 	return (
