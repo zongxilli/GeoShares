@@ -1,11 +1,5 @@
 import { AuthenticationError } from 'apollo-server';
-
-const user = {
-	_id: '1',
-	name: 'Kenny',
-	email: 'zongxi2014@gmail.com',
-	picture: 'http://cloudinary.com/asdf',
-};
+import Pin from './models/Pin.js';
 
 const authenticated = (next) => (root, args, ctx, info) => {
 	if (!ctx.currentUser) {
@@ -18,5 +12,17 @@ const authenticated = (next) => (root, args, ctx, info) => {
 export default {
 	Query: {
 		me: authenticated((root, args, ctx) => ctx.currentUser),
+	},
+
+	Mutation: {
+		createPin: authenticated(async (root, args, ctx) => {
+			const newPin = await Pin.create({
+				...args.input,
+				author: ctx.currentUser._id,
+			});
+
+			const pinAdded = await Pin.populate(newPin, 'author');
+			return pinAdded;
+		}),
 	},
 };
