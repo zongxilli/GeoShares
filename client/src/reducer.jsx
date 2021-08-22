@@ -90,7 +90,7 @@ export default function reducer(state, { type, payload }) {
 
 		// 	return {
 		// 		...state,
-		// 		pins: filteredPins,
+		// 		pins: filteredPins, 
 		// 		currentPin: null,
 		// 	};
 
