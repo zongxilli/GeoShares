@@ -44,4 +44,10 @@ export default gql`
 		deletePin(pinId: ID!): Pin
 		createComment(pinId: ID!, text: String!): Pin
 	}
+
+	type Subscription {
+    pinAdded: Pin
+    pinDeleted: Pin
+    pinUpdated: Pin
+  }
 `;

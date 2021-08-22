@@ -54,15 +54,15 @@ const CreatePin = ({ classes }) => {
 			const { latitude, longitude } = state.draft;
 			const variables = { title, image: url, content, latitude, longitude };
 
-			const { createPin } = await client.request(
+			await client.request(
 				CREATE_PIN_MUTATION,
 				variables
 			);
 
 
-			console.log('Pin created', { createPin });
-			//! I dont think we need this one
-			dispatch({type: 'CREATE_PIN', payload: createPin})
+			// console.log('Pin created', { createPin });
+			// //! I dont think we need this one
+			// dispatch({type: 'CREATE_PIN', payload: createPin})
 			discardHandler();
 		} catch (err) {
 			setSubmitting(false);

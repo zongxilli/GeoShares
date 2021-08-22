@@ -17,11 +17,10 @@ const CreateComment = ({ classes }) => {
 
 	const submitCommentHandler = async () => {
 		const variables = { pinId: state.currentPin._id, text: comment };
-		const { createComment } = await client.request(
+		await client.request(
 			CREATE_COMMENT_MUTATION,
 			variables
 		);
-		dispatch({ type: 'CREATE_COMMENT', payload: createComment });
 		setComment('');
 	};
 

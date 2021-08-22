@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import FaceIcon from '@material-ui/icons/Face';
+import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
+import TimelineIcon from '@material-ui/icons/Timeline';
 import format from 'date-fns/format';
 
 import Context from '../../context';
@@ -24,15 +25,15 @@ const PinContent = ({ classes }) => {
 				variant="h6"
 				color="inherit"
 				gutterBottom>
-				<FaceIcon className={classes.icon} /> {author.name}
+				<RecordVoiceOverIcon className={classes.icon} color='secondary' /> {author.name}
 			</Typography>
 			<Typography
 				className={classes.text}
 				variant="subtitle2"
 				color="inherit"
 				gutterBottom>
-				<AccessTimeIcon className={classes.icon} />
-				{format(Number(createdAt), 'MMM Do, YYYY')}
+				<TimelineIcon className={classes.icon} color='secondary' />
+				{format(Number(createdAt), 'MMM DD, YYYY')}
 			</Typography>
 			<Typography variant="subtitle1" gutterBottom>
 				{content}
