@@ -45,7 +45,7 @@ const Login = ({ classes }) => {
 				Welcome to GeoShares
 			</Typography>
 			<GoogleLogin
-				clientId={process.env.REACT_APP_OAUTH_CLIENT_ID}
+				clientId="542755764696-prhmgcj7nhqs0m1r3ntandrcqquqlroi.apps.googleusercontent.com"
 				onFailure={onFailureHandler}
 				onSuccess={onSuccessHandler}
 				isSignedIn={true}

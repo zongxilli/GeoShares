@@ -193,7 +193,7 @@ const Map = ({ classes }) => {
 				width="100vw"
 				height="calc(100vh - 64px)"
 				mapStyle={MAP_LIST[currMapIndex]}
-				mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN}
+				mapboxApiAccessToken='pk.eyJ1Ijoiem9uZ3hpLWtlbm55IiwiYSI6ImNrc2ZpOHlxeTA2eHMydnFrOXVicWIxbzkifQ.sM0VmwR4GizTsKKmo_Oyrg'
 				onViewportChange={(currViewport) => setViewport(currViewport)}
 				onClick={(e) => onMapClickHandler(e)}
 				scrollZoom={!mobileSize}
