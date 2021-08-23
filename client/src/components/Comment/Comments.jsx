@@ -17,18 +17,20 @@ const Comments = ({ classes, comments }) => (
 						<Avatar src={comment.author.picture} alt={comment.author.name} />
 					</ListItemAvatar>
 					<ListItemText
-						primary={
+						primary={comment.text}
+						secondary={
 							<>
 								<Typography
 									className={classes.inline}
 									component="span"
-									color="textPrimary">
+									color="textPrimary"
+									style={{color: '#616161'}}
+									>
 									{comment.author.name}
 								</Typography>{' '}
 								· {distanceInWordsToNow(Number(comment.createdAt))} ago
 							</>
 						}
-						secondary={comment.text}
 					/>
 				</ListItem>
 			))}
