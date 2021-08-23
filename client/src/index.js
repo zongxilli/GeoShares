@@ -16,8 +16,9 @@ import { ApolloClient } from "apollo-client";
 import { WebSocketLink } from "apollo-link-ws";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
+// Deployed backend in Heroku
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:4000/graphql",
+  uri: "wss://geoshares.herokuapp.com/graphql",
   options: {
     timeout: 30000,
     reconnect: true
