@@ -82,18 +82,6 @@ export default function reducer(state, { type, payload }) {
 				pins: filteredPins,
 			};
 
-		// case 'DELETE_PIN':
-		// 	const deletedPin = payload;
-		// 	const filteredPins = state.pins.filter(
-		// 		(pin) => pin._id !== deletedPin._id
-		// 	);
-
-		// 	return {
-		// 		...state,
-		// 		pins: filteredPins, 
-		// 		currentPin: null,
-		// 	};
-
 		case 'CREATE_COMMENT':
 			const updatedCurrentPin = payload;
 			// find and replace
@@ -105,6 +93,7 @@ export default function reducer(state, { type, payload }) {
 				pins: updatedPins,
 				currentPin: updatedCurrentPin,
 			};
+
 		default:
 			return state;
 	}

@@ -5,17 +5,16 @@ import Typography from '@material-ui/core/Typography';
 
 const NoContent = ({ classes }) => (
 	<div className={classes.root}>
-		<EditLocationIcon className={classes.icon} style={{color: 'hotpink'}} />
+		<EditLocationIcon className={classes.icon} style={{ color: 'hotpink' }} />
 		<Typography
 			noWrap
 			component="h2"
 			variant="h6"
 			align="center"
 			color="textPrimary"
-			gutterBottom
-		>
-      Click on map to pin
-    </Typography>
+			gutterBottom>
+			Click on map to pin
+		</Typography>
 	</div>
 );
 
@@ -27,7 +26,7 @@ const styles = (theme) => ({
 		justifyContent: 'center',
 	},
 	icon: {
-		margin: theme.spacing.unit,
+		margin: theme.spacing(1),
 		fontSize: '80px',
 	},
 });

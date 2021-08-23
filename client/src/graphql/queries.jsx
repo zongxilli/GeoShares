@@ -1,12 +1,12 @@
 export const ME_QUERY = `
-  {
-    me {
-      _id
-		  name
-		  email
-		  picture
-    }
+{
+  me {
+    _id
+		name
+		email
+		picture
   }
+}
 `;
 
 export const GET_PINS_QUERY = `

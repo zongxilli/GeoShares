@@ -18,6 +18,7 @@ import TrafficRoundedIcon from '@material-ui/icons/TrafficRounded';
 import DirectionsBikeOutlinedIcon from '@material-ui/icons/DirectionsBikeOutlined';
 import PublicOutlinedIcon from '@material-ui/icons/PublicOutlined';
 import NightsStayIcon from '@material-ui/icons/NightsStay';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { useClient } from '../client';
 import { GET_PINS_QUERY } from '../graphql/queries';
@@ -33,7 +34,7 @@ import Context from '../context';
 
 // --------------------------------------------------------------------
 //                                                     Helper Functions
-//= Kenny Edition
+//= K E
 const indexPlusOne = (num) => {
 	if (num + 1 >= MAP_LIST.length) {
 		return 0;
@@ -52,7 +53,7 @@ const INITIAL_VIEWPORT = {
 	zoom: 12,
 };
 
-//= Kenny Edition
+//= K E
 const MAP_LIST = [
 	'mapbox://styles/mapbox/streets-v11',
 	'mapbox://styles/mapbox/navigation-night-v1',
@@ -66,19 +67,19 @@ const MAP_LIST = [
 // --------------------------------------------------------------------
 //=                                                      Map Icon Style
 
-//= Kenny Edition
+//= K E
 const geolocateControlStyle = {
 	right: 50,
 	bottom: 40,
 };
 
-//= Kenny Edition
+//= K E
 const navControlStyle = {
 	right: 50,
 	bottom: 100,
 };
 
-//= Kenny Edition
+//= K E
 const scaleControlStyle = {
 	right: 110,
 	bottom: 40,
@@ -87,9 +88,10 @@ const scaleControlStyle = {
 //? --------------------------------------------------------------------
 
 const Map = ({ classes }) => {
+	const mobileSize = useMediaQuery("(max-width: 650px)");
 	const client = useClient();
 
-	//= Kenny Edition
+	//= K E
 	const [currMapIndex, setCurrMapIndex] = useState(0);
 	const [stopPinFeatureForOneSec, setStopPinFeatureForOneSec] = useState(false);
 
@@ -99,17 +101,21 @@ const Map = ({ classes }) => {
 	//const [userPosition, setUserPosition] = useState(null);
 	const [popup, setPopup] = useState(null);
 
-	useEffect(() => {
-		getUserPosition();
-	}, []);
+	// Auto remove popup if pin itself is deleted by another user
+  useEffect(() => {
+    const pinExists =
+      popup && state.pins.findIndex(pin => pin._id === popup._id) > -1;
+    if (!pinExists) {
+      setPopup(null);
+    }
+  }, [state.pins.length]);
 
 	useEffect(() => {
 		getPins();
-		//! I think we can put state.pins
-		//! down in the box in order to avoid CREATE_PINS reducer
+		getUserPosition();
 	}, []);
 
-	//== Kenny Edition
+	//== K E
 	useEffect(
 		() => {
 			setTimeout(() => {
@@ -134,7 +140,7 @@ const Map = ({ classes }) => {
 		dispatch({ type: 'GET_PINS', payload: getPins });
 	};
 
-	//== Kenny Edition
+	//== K E
 	const changeMapOnClickHandler = (e) => {
 		e.preventDefault();
 
@@ -182,7 +188,7 @@ const Map = ({ classes }) => {
 	};
 
 	return (
-		<div className={classes.root}>
+		<div className={mobileSize ? classes.rootMobile : classes.root}>
 			<ReactMapGL
 				width="100vw"
 				height="calc(100vh - 64px)"
@@ -190,6 +196,7 @@ const Map = ({ classes }) => {
 				mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN}
 				onViewportChange={(currViewport) => setViewport(currViewport)}
 				onClick={(e) => onMapClickHandler(e)}
+				scrollZoom={!mobileSize}
 				{...viewport}>
 				{/* Geo locate Control  */}
 				<div className={classes.geolocationControl}>
@@ -200,7 +207,7 @@ const Map = ({ classes }) => {
 						auto
 					/>
 				</div>
-				{/* //= -------------------- Kenny Edition -------------------- */}
+				{/* //= -------------------- K E -------------------- */}
 
 				<ScaleControl style={scaleControlStyle} />
 				<NavigationControl style={navControlStyle} />
@@ -227,7 +234,7 @@ const Map = ({ classes }) => {
 						<PublicOutlinedIcon fontSize="large" style={{ color: 'white' }} />
 					)}
 				</div>
-				{/* //= -------------------- Kenny Edition -------------------- */}
+				{/* //= -------------------- K E -------------------- */}
 
 				{/* Pin for User's Current Position */}
 				{/* {userPosition && (

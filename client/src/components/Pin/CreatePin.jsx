@@ -10,12 +10,14 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 import ClearIcon from '@material-ui/icons/Clear';
 import SaveIcon from '@material-ui/icons/SaveTwoTone';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import Context from '../../context';
 import { useClient } from '../../client';
 import { CREATE_PIN_MUTATION } from '../../graphql/mutations';
 
 const CreatePin = ({ classes }) => {
+	const mobileSize = useMediaQuery('(max-width: 650px)');
 	const client = useClient();
 	const { state, dispatch } = useContext(Context);
 
@@ -46,19 +48,14 @@ const CreatePin = ({ classes }) => {
 	};
 
 	const submitHandler = async (e) => {
-		e.preventDefault();
-
 		try {
+			e.preventDefault();
 			setSubmitting(true);
 			const url = await imageUploadHandler();
 			const { latitude, longitude } = state.draft;
 			const variables = { title, image: url, content, latitude, longitude };
 
-			await client.request(
-				CREATE_PIN_MUTATION,
-				variables
-			);
-
+			await client.request(CREATE_PIN_MUTATION, variables);
 
 			// console.log('Pin created', { createPin });
 			// //! I dont think we need this one
@@ -107,7 +104,7 @@ const CreatePin = ({ classes }) => {
 					name="content"
 					label="content"
 					multiline
-					rows="8"
+					rows={mobileSize ? '3' : '8'}
 					margin="normal"
 					fullWidth
 					variant="outlined"
@@ -144,11 +141,11 @@ const styles = (theme) => ({
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'column',
-		paddingBottom: theme.spacing.unit,
+		paddingBottom: theme.spacing(1),
 	},
 	contentField: {
-		marginLeft: theme.spacing.unit,
-		marginRight: theme.spacing.unit,
+		marginLeft: theme.spacing(1),
+		marginRight: theme.spacing(1),
 		width: '95%',
 	},
 	input: {
@@ -160,20 +157,20 @@ const styles = (theme) => ({
 	},
 	iconLarge: {
 		fontSize: 40,
-		marginRight: theme.spacing.unit,
+		marginRight: theme.spacing(1),
 	},
 	leftIcon: {
 		fontSize: 20,
-		marginRight: theme.spacing.unit,
+		marginRight: theme.spacing(1),
 	},
 	rightIcon: {
 		fontSize: 20,
-		marginLeft: theme.spacing.unit,
+		marginLeft: theme.spacing(1),
 	},
 	button: {
-		marginTop: theme.spacing.unit * 2,
-		marginBottom: theme.spacing.unit * 2,
-		marginRight: theme.spacing.unit,
+		marginTop: theme.spacing(2),
+		marginBottom: theme.spacing(2),
+		marginRight: theme.spacing(1),
 		marginLeft: 0,
 	},
 });

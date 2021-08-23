@@ -26,17 +26,17 @@ export default gql`
 		author: User
 	}
 
-	type Query {
-		me: User
-		getPins: [Pin!]
-	}
-
 	input CreatePinInput {
 		title: String
 		image: String
 		content: String
 		latitude: Float
 		longitude: Float
+	}
+
+	type Query {
+		me: User
+		getPins: [Pin!]
 	}
 
 	type Mutation {
@@ -46,8 +46,8 @@ export default gql`
 	}
 
 	type Subscription {
-    pinAdded: Pin
-    pinDeleted: Pin
-    pinUpdated: Pin
-  }
+		pinAdded: Pin
+		pinDeleted: Pin
+		pinUpdated: Pin
+	}
 `;

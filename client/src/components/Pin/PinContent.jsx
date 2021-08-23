@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
+//import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import format from 'date-fns/format';
+
+import Avatar from '@material-ui/core/Avatar';
 
 import Context from '../../context';
 import Comments from '../Comment/Comments';
@@ -14,9 +16,10 @@ const PinContent = ({ classes }) => {
 	const { state } = useContext(Context);
 	const { title, content, author, createdAt, comments } = state.currentPin;
 
+	console.log({ state });
 	return (
 		<div className={classes.root}>
-			<Typography component="h2" variant="h4" color="primary" gutterBottom>
+			<Typography component="h2" variant="h4" color="secondary" gutterBottom>
 				{title}
 			</Typography>
 			<Typography
@@ -25,14 +28,16 @@ const PinContent = ({ classes }) => {
 				variant="h6"
 				color="inherit"
 				gutterBottom>
-				<RecordVoiceOverIcon className={classes.icon} color='secondary' /> {author.name}
+				<RecordVoiceOverIcon className={classes.icon} color="secondary" />{' '}
+				{author.name}
 			</Typography>
+
 			<Typography
 				className={classes.text}
 				variant="subtitle2"
 				color="inherit"
 				gutterBottom>
-				<TimelineIcon className={classes.icon} color='secondary' />
+				<TimelineIcon className={classes.icon} color="secondary" />
 				{format(Number(createdAt), 'MMM DD, YYYY')}
 			</Typography>
 			<Typography variant="subtitle1" gutterBottom>
@@ -53,8 +58,8 @@ const styles = (theme) => ({
 		width: '100%',
 	},
 	icon: {
-		marginLeft: theme.spacing.unit,
-		marginRight: theme.spacing.unit,
+		marginLeft: theme.spacing(1),
+		marginRight: theme.spacing(1),
 	},
 	text: {
 		display: 'flex',

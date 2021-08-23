@@ -3,10 +3,12 @@ import { GoogleLogout } from 'react-google-login';
 import { withStyles } from '@material-ui/core/styles';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Typography from '@material-ui/core/Typography';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import Context from '../../context';
 
 const Logout = ({ classes }) => {
+	const mobileSize = useMediaQuery('(max-width: 650px)');
 	const { dispatch } = useContext(Context);
 
 	const onSignout = () => {
@@ -21,9 +23,9 @@ const Logout = ({ classes }) => {
 			render={({ onClick }) => (
 				<span className={classes.root} onClick={onClick}>
 					<Typography
+						style={{ display: mobileSize ? 'none' : 'block', color: 'white' }}
 						variant="body1"
-						className={classes.buttonText}
-						style={{ color: 'white' }}>
+						className={classes.buttonText}>
 						Signout
 					</Typography>
 					<ExitToAppIcon

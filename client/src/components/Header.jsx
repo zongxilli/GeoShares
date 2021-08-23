@@ -5,11 +5,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 //import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import CameraIcon from '@material-ui/icons/Camera';
 import Typography from '@material-ui/core/Typography';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import Context from '../context';
 import Logout from './Auth/Logout';
 
 const Header = ({ classes }) => {
+	const mobileSize = useMediaQuery('(max-width: 650px)');
 	const { state } = useContext(Context);
 	const { currentUser } = state;
 
@@ -20,7 +22,12 @@ const Header = ({ classes }) => {
 					{/* Title & Logo */}
 					<div className={classes.grow}>
 						<CameraIcon className={classes.icon} style={{ color: 'lime' }} />
-						<Typography component="h1" variant="h6" color="inherit" noWrap>
+						<Typography
+							className={mobileSize ? classes.mobile : ''}
+							component="h1"
+							variant="h6"
+							color="inherit"
+							noWrap>
 							GeoShares
 						</Typography>
 					</div>
@@ -34,7 +41,11 @@ const Header = ({ classes }) => {
 								alt={currentUser.name}
 							/>
 
-							<Typography variant="h5" color="inherit" noWrap>
+							<Typography
+								className={mobileSize ? classes.mobile : ''}
+								variant="h5"
+								color="inherit"
+								noWrap>
 								{currentUser.name}
 							</Typography>
 						</div>
@@ -58,7 +69,7 @@ const styles = (theme) => ({
 		alignItems: 'center',
 	},
 	icon: {
-		marginRight: theme.spacing.unit,
+		marginRight: theme.spacing(1),
 		color: 'green',
 		fontSize: 45,
 	},
@@ -68,7 +79,7 @@ const styles = (theme) => ({
 	picture: {
 		height: '50px',
 		borderRadius: '90%',
-		marginRight: theme.spacing.unit * 2,
+		marginRight: theme.spacing(2),
 	},
 });
 

@@ -35,7 +35,7 @@ export default {
 
 			const pinAdded = await Pin.populate(newPin, 'author');
 
-			pubsub.publish(PIN_ADDED, { pinAdded });
+			pubsub.publish(PIN_ADDED, { pinAdded: pinAdded });
 
 			return pinAdded;
 		}),
@@ -43,7 +43,7 @@ export default {
 		deletePin: authenticated(async (root, args, ctx) => {
 			const pinDeleted = await Pin.findOneAndDelete({ _id: args.pinId }).exec();
 
-			pubsub.publish(PIN_DELETED, { pinDeleted });
+			pubsub.publish(PIN_DELETED, { pinDeleted: pinDeleted });
 
 			return pinDeleted;
 		}),
@@ -58,7 +58,7 @@ export default {
 				.populate('author')
 				.populate('comments.author');
 
-			pubsub.publish(PIN_UPDATED, { pinUpdated });
+			pubsub.publish(PIN_UPDATED, { pinUpdated: pinUpdated });
 
 			return pinUpdated;
 		}),
