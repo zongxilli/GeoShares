@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { GraphQLClient } from "graphql-request";
 
 export const BASE_URL =
-  process.env.NODE_ENV === "production"
+  process.env.REACT_APP_NODE_ENV === "production"
     ? "https://geoshares.herokuapp.com/graphql"
     : "http://localhost:4000/graphql";
 
