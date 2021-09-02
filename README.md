@@ -14,4 +14,4 @@ Start frontend server
 
 ![alt text](https://github.com/zongxilli/GeoShares/blob/main/DemoImages/Demo1.png)
 ![alt text](https://github.com/zongxilli/GeoShares/blob/main/DemoImages/Demo2.png)
-### And More
+### And More...
